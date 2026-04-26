@@ -56,8 +56,6 @@ This approach allows the app to leverage modern web UI patterns while maintainin
 
 ## 📸 Screenshots
 
-*(Add screenshots of your app here! Replace these placeholder links with actual images of your app)*
-
 <div align="center">
   <img src="https://github.com/user-attachments/assets/3e5dbf6c-d72b-41e3-9f5a-9e4db762d65c?text=Dashboard" width="200" alt="Dashboard">
   &nbsp;&nbsp;&nbsp;&nbsp;
