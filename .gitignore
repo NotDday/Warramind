@@ -1,0 +1,27 @@
+# Local configuration
+local.properties
+.env
+
+# Android/IntelliJ
+.idea/
+*.iml
+.gradle/
+build/
+app/build/
+captures/
+.externalNativeBuild/
+.cxx/
+
+# Node.js (Backend)
+node_modules/
+npm-debug.log
+.vercel/
+
+# OS/Mac files
+.DS_Store
+Thumbs.db
+
+# Do not push zip backups or APKs
+*.zip
+*.apk
+*.aab

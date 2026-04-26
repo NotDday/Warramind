@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Warramind - Warranty Management</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+</head>
+<body>
+    <!-- Splash Screen -->
+    <div class="splash-screen" id="splashScreen">
+        <div class="splash-content">
+            <h1>Warramind</h1>
+            <div class="splash-logo">
+                <img src="splash.png" alt="Warramind Logo">
+            </div>
+            <p>Keep track of all your warranties</p>
+            <button id="continueBtn">Tap to Continue</button>
+        </div>
+    </div>
+
+    <!-- Login Screen -->
+    <div class="login-wrapper" id="loginScreen">
+        <div class="login-container">
+            <div class="login-card">
+                <!-- Logo Section -->
+                <div class="logo-section">
+                    <div class="logo-icon">🛡️</div>
+                    <h1 class="app-name">Warramind</h1>
+                    <p class="app-tagline">Keep track of all your warranties</p>
+                </div>
+
+                <!-- Welcome Section -->
+                <div class="welcome-section">
+                    <h2 class="welcome-title">Welcome Back!</h2>
+                    <p class="welcome-subtitle">
+                        Sign in to manage and track all your product warranties in one place
+                    </p>
+                </div>
+
+                <!-- Login Buttons -->
+                <div class="login-buttons">
+                    <!-- Google Login Button -->
+                    <button class="login-btn login-btn--google" id="googleBtn">
+                        <span class="btn-icon">
+                            <svg class="google-icon" viewBox="0 0 24 24">
+                                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                            </svg>
+                        </span>
+                        <span>Continue with Google</span>
+                    </button>
+
+                    <!-- Divider -->
+                    <div class="divider">
+                        <div class="divider-line"></div>
+                        <span class="divider-text">or</span>
+                        <div class="divider-line"></div>
+                    </div>
+
+                    <!-- Guest Login Button -->
+                    <button class="login-btn btn-guest" id="guestBtn">
+                        <span class="btn-icon">👤</span>
+                        <span>Continue as Guest</span>
+                    </button>
+                </div>
+
+                <!-- Features -->
+                <div class="features">
+                    <div class="feature-item">
+                        <span class="feature-icon">🔒</span>
+                        <span>Secure</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">☁️</span>
+                        <span>Cloud Sync</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">🔔</span>
+                        <span>Reminders</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <p class="footer-text">
+                By continuing, you agree to our
+                <a href="#" class="footer-link">Terms of Service</a>
+                and
+                <a href="#" class="footer-link">Privacy Policy</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="root" style="display: none;">
+        <div class="app-container">
+            <!-- Header Section -->
+            <header class="header home-active">
+                <div class="header-title">
+                    <span class="shield-icon" role="img" aria-label="Shield">🛡️</span>
+                    <h1 class="app-title">Warramind</h1>
+                </div>
+                <div class="header-extra">
+                    <h2 class="welcome-heading">Welcome to Warramind</h2>
+                    <p class="subtitle">Manage and track all your product warranties in one place</p>
+                </div>
+            </header>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <!-- Home Section -->
+                <section class="content-section" id="homeSection">
+                    <!-- Action Buttons -->
+                    <section class="action-buttons">
+                        <button class="btn btn--primary btn-add-warranty" id="addWarrantyBtn">
+                            <span class="btn-icon">➕</span>
+                            Add Warranty
+                        </button>
+                        <button class="btn btn--outline btn-view-warranties" id="viewWarrantiesBtn">
+                            <span class="btn-icon">📋</span>
+                            View Warranties
+                        </button>
+                    </section>
+
+                    <!-- Status Cards -->
+                    <section class="status-cards">
+                        <div class="status-card status-card--active">
+                            <div class="status-number" id="activeCount">0</div>
+                            <div class="status-label">Active</div>
+                        </div>
+                        <div class="status-card status-card--expiring">
+                            <div class="status-number" id="expiringCount">0</div>
+                            <div class="status-label">Expiring Soon</div>
+                        </div>
+                    </section>
+
+                    <div class="placeholder-content">
+                        <h3>Dashboard Overview</h3>
+                        <p>Your warranty management dashboard. Use the buttons above to add or view your warranties.</p>
+                    </div>
+                </section>
+
+                <!-- Add Warranty Section -->
+                <section class="content-section hidden" id="addSection">
+                    <div class="add-warranty-container">
+                        <h2 class="section-title">Warranty Details</h2>
+
+                        <form class="warranty-form" id="warrantyForm">
+                            <!-- Product Name -->
+                            <div class="form-group">
+                                <label class="form-label" for="productName">
+                                    Product Name <span class="required">*</span>
+                                </label>
+                                <input type="text" id="productName" name="productName" class="form-control" placeholder="e.g., iPhone 15 Pro" required>
+                                <div class="error-message" id="productNameError"></div>
+                            </div>
+
+                            <!-- Purchase Date -->
+                            <div class="form-group">
+                                <label class="form-label" for="purchaseDate">
+                                    Purchase Date <span class="required">*</span>
+                                </label>
+                                <div class="date-input-wrapper">
+                                    <span class="date-icon">📅</span>
+                                    <input type="date" id="purchaseDate" name="purchaseDate" class="form-control date-input" required>
+                                </div>
+                                <div class="error-message" id="purchaseDateError"></div>
+                            </div>
+
+                            <!-- Warranty Expiry Date -->
+                            <div class="form-group">
+                                <label class="form-label" for="warrantyExpiry">
+                                    Warranty Expiry Date <span class="required">*</span>
+                                </label>
+                                <div class="date-input-wrapper">
+                                    <span class="date-icon">📅</span>
+                                    <input type="date" id="warrantyExpiry" name="warrantyExpiry" class="form-control date-input" required>
+                                </div>
+                                <div class="error-message" id="warrantyExpiryError"></div>
+                            </div>
+
+                            <!-- Store Name -->
+                            <div class="form-group">
+                                <label class="form-label" for="storeName">
+                                    Store/Company Name <span class="required">*</span>
+                                </label>
+                                <input type="text" id="storeName" name="storeName" class="form-control" placeholder="e.g., Apple Store, Best Buy" required>
+                                <div class="error-message" id="storeNameError"></div>
+                            </div>
+
+                            <!-- Receipt Section -->
+                            <div class="form-group">
+                                <label class="form-label">Receipt (Optional)</label>
+                                <div class="receipt-buttons">
+                                    <button type="button" class="btn btn--outline receipt-btn" id="uploadBtn">
+                                        <span class="btn-icon">📁</span> Upload
+                                    </button>
+                                    <button type="button" class="btn btn--outline receipt-btn" id="cameraBtn">
+                                        <span class="btn-icon">📷</span> Camera
+                                    </button>
+                                </div>
+                                <div class="receipt-status" id="receiptStatus" style="display: none;"></div>
+                            </div>
+
+                            <!-- Save Button -->
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn--primary save-warranty-btn">
+                                    <span class="btn-icon">💾</span> Save Warranty
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </section>
+
+                <!-- Warranties Section -->
+                <section class="content-section hidden" id="warrantiesSection">
+                    <div class="warranties-header">
+                        <h3>Your Warranties</h3>
+                        <div class="warranties-count" id="warrantiesCount">Showing 0 of 0 warranties</div>
+                    </div>
+
+                    <!-- Filter and Sort Controls -->
+                    <div class="filter-sort-controls">
+                        <div class="filter-chips">
+                            <button class="filter-chip active" data-filter="all">All</button>
+                            <button class="filter-chip" data-filter="active">Active</button>
+                            <button class="filter-chip" data-filter="expiring">Expiring Soon</button>
+                            <button class="filter-chip" data-filter="expired">Expired</button>
+                        </div>
+
+                        <div class="sort-controls">
+                            <label for="sortSelect" class="sort-label">Sort by:</label>
+                            <select id="sortSelect" class="form-control sort-select">
+                                <option value="expiry_date">Expiry Date</option>
+                                <option value="purchase_date">Purchase Date</option>
+                                <option value="product_name">Product Name</option>
+                                <option value="store_name">Store Name</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Warranties List -->
+                    <div class="warranties-list" id="warrantiesList">
+                        <div class="empty-state" id="emptyState">
+                            <span class="empty-icon">📋</span>
+                            <p>No warranties found</p>
+                            <button class="btn btn--primary">Add Your First Warranty</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Me Section -->
+                <section class="content-section hidden" id="meSection">
+                    <div class="settings-container">
+                        <h2 class="section-title">Settings</h2>
+
+                        <!-- Theme Settings -->
+                        <div class="setting-item">
+                            <label for="themeSwitch" class="setting-label">Dark Mode</label>
+                            <div class="switch-container">
+                                <input type="checkbox" id="themeSwitch" class="switch-input">
+                                <label for="themeSwitch" class="switch-slider"></label>
+                            </div>
+                        </div>
+
+                        <!-- Notification Settings -->
+                        <div class="setting-item">
+                            <label for="notificationDays" class="setting-label">Notify Me Before Expiry</label>
+                            <div class="notification-days-input">
+                                <input type="number" id="notificationDays" class="form-control" value="7" min="1" max="30">
+                                <span>days</span>
+                            </div>
+                        </div>
+
+                        <h2 class="section-title">Data & Sync</h2>
+                        <!-- Sync Settings -->
+                        <div class="setting-item">
+                            <label class="setting-label">Cloud Sync</label>
+                            <button class="btn btn--outline" id="syncBtn">
+                                <span class="btn-icon">🔄</span> Sync Now
+                            </button>
+                        </div>
+                        <p class="sync-status">Last synced: Never</p>
+
+                        <h2 class="section-title">Account</h2>
+
+                        <!-- Profile Card -->
+                        <div class="profile-card">
+                            <!-- Avatar -->
+                            <div class="profile-avatar-wrapper" id="avatarWrapper">
+                                <img class="profile-avatar" id="profileAvatar" src="" alt="Avatar" style="display:none;">
+                                <div class="profile-avatar-initials" id="profileInitials">?</div>
+                                <div class="avatar-edit-overlay" id="avatarEditOverlay">
+                                    <span>📷</span>
+                                </div>
+                                <!-- Hidden file input -->
+                                <input type="file" id="avatarFileInput" accept="image/*" style="display:none;">
+                            </div>
+
+                            <!-- Fields -->
+                            <div class="profile-fields">
+                                <input
+                                    type="text"
+                                    id="displayNameInput"
+                                    class="form-control profile-display-name-input"
+                                    placeholder="Enter display name"
+                                    maxlength="40"
+                                >
+                                <span class="profile-email-label" id="accountEmail">Not logged in</span>
+                            </div>
+
+                            <!-- Actions -->
+                            <div class="profile-actions">
+                                <button class="btn btn--primary" id="saveProfileBtn">
+                                    <span class="btn-icon">💾</span> Save Profile
+                                </button>
+                                <button class="btn btn--outline btn--danger" id="logoutBtn">
+                                    <span class="btn-icon">🚪</span> Logout
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Warranty Details Section -->
+                <section class="content-section hidden" id="detailsSection">
+                    <div class="warranty-details-container">
+                        <h2 class="section-title" id="detailsProductName"></h2>
+
+                        <div class="details-card">
+                            <div class="details-item">
+                                <span class="details-label">Purchase Date</span>
+                                <span class="details-value" id="detailsPurchaseDate"></span>
+                            </div>
+                            <div class="details-item">
+                                <span class="details-label">Warranty Expires</span>
+                                <span class="details-value" id="detailsWarrantyExpiry"></span>
+                            </div>
+                            <div class="details-item">
+                                <span class="details-label">Store/Company</span>
+                                <span class="details-value" id="detailsStoreName"></span>
+                            </div>
+                            <div class="details-item" id="detailsReceiptContainer">
+                                <span class="details-label">Receipt</span>
+                                <div class="details-receipt-actions">
+                                    <span class="details-value" id="detailsReceiptStatus">No Receipt Attached</span>
+                                    <button class="btn btn--secondary btn--sm hidden" id="viewReceiptBtn">
+                                        <span class="btn-icon">📄</span> View Receipt
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="details-actions">
+                            <button class="btn btn--primary" id="editWarrantyBtn">
+                                <span class="btn-icon">✏️</span> Edit Warranty
+                            </button>
+                            <button class="btn btn--outline btn--danger" id="deleteWarrantyBtnDetails">
+                                <span class="btn-icon">🗑️</span> Delete Warranty
+                            </button>
+                        </div>
+                    </div>
+                </section>
+            </main>
+
+            <!-- Bottom Navigation -->
+            <nav class="bottom-nav">
+                <button class="nav-item active" data-section="home">
+                    <span class="nav-icon">🏠</span>
+                    <span class="nav-label">Home</span>
+                </button>
+                <button class="nav-item" data-section="add">
+                    <span class="nav-icon">➕</span>
+                    <span class="nav-label">Add</span>
+                </button>
+                <button class="nav-item" data-section="warranties">
+                    <span class="nav-icon">📋</span>
+                    <span class="nav-label">Warranties</span>
+                </button>
+                <button class="nav-item" data-section="me">
+                    <span class="nav-icon">⚙️</span>
+                    <span class="nav-label">Me</span>
+                </button>
+            </nav>
+        </div>
+
+        <!-- Delete Confirmation Modal -->
+        <div class="modal hidden" id="deleteModal">
+            <div class="modal-backdrop"></div>
+            <div class="modal-content">
+                <h4>Delete Warranty</h4>
+                <p>Are you sure you want to delete this warranty?</p>
+                <div class="modal-actions">
+                    <button class="btn btn--outline" id="cancelDelete">Cancel</button>
+                    <button class="btn btn--primary" id="confirmDelete">Delete</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Success Message -->
+        <div class="toast hidden" id="successToast">
+            <span class="toast-icon">✅</span>
+            <span class="toast-message">Warranty deleted successfully</span>
+        </div>
+        <!-- App Scripts -->
+        <script src="js/ui/uiManager.js"></script>
+        <script src="js/data/warrantyManager.js"></script>
+        <script src="js/features/receiptManager.js"></script>
+        <script src="js/features/notificationManager.js"></script>
+        <script src="js/ui/navigation.js"></script>
+        <script src="js/ui/formValidator.js"></script>
+        <script src="js/ui/toastManager.js"></script>
+        <script src="js/ui/modalManager.js"></script>
+        <script src="js/data/profileManager.js"></script>
+        <script src="js/data/syncManager.js"></script>
+        <script src="js/data/filterSort.js"></script>
+        <script src="js/main.js"></script>
+    </div>
+
+    <!-- UI State Transition Scripts -->
+    <script>
+        // Splash Screen Transition Logic
+        const splashScreen = document.getElementById('splashScreen');
+        const continueBtn = document.getElementById('continueBtn');
+        if (continueBtn && splashScreen) {
+            continueBtn.addEventListener('click', () => {
+                splashScreen.classList.add('slide-up');
+                setTimeout(() => {
+                    splashScreen.style.display = 'none';
+                }, 700);
+            });
+        }
+
+        // Login Logic
+        const googleBtn = document.getElementById('googleBtn');
+        const guestBtn = document.getElementById('guestBtn');
+        const loginScreen = document.getElementById('loginScreen');
+        const rootApp = document.getElementById('root');
+
+        function showLoading(btn, text) {
+            const originalContent = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = `<span class="spinner"></span><span>${text}</span>`;
+
+            setTimeout(() => {
+                btn.innerHTML = originalContent;
+                btn.disabled = false;
+
+                // Transition to Main App
+                if(loginScreen) loginScreen.style.display = 'none';
+                if(rootApp) rootApp.style.display = 'block';
+            }, 1500);
+        }
+
+         if (googleBtn) {
+            googleBtn.addEventListener('click', () => {
+                if (window.AndroidBridge && window.AndroidBridge.loginWithGoogle) {
+                    // Show loading spinner
+                    googleBtn.innerHTML = `<span class="spinner"></span><span>Connecting...</span>`;
+                    // Call the Java method we just wrote
+                    window.AndroidBridge.loginWithGoogle();
+                } else {
+                    alert("Native bridge not found!");
+                }
+            });
+        }
+        if (guestBtn) guestBtn.addEventListener('click', () => showLoading(guestBtn, 'Signing in...'));
+    </script>
+</body>
+</html>
