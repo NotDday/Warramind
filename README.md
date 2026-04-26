@@ -108,5 +108,3 @@ For developers looking to review or build the code locally:
 This project was developed collaboratively by:
 *   **Jaydev R Manoj** - [LinkedIn](https://linkedin.com/in/jaydev-r-manoj-585147328/) | [GitHub](https://github.com/NotDday)
 *   **Vimal S** - [GitHub Profile](https://github.com/Vor-Tex-v)
-
-```
